@@ -13,6 +13,24 @@ int Y_pin[2] = {1, 3};// analog pin connected to Y output
 int row[2] = {0, 5};
 int col[2] = {4, 4};
 
+void aDelay(int period){
+
+
+  int time_before = millis();
+
+  while (true){
+  
+    if (millis() > time_before + period){
+  
+      break;
+      
+    }
+  }
+  
+  
+}
+
+
 class Player{
 
   public:
@@ -53,6 +71,8 @@ class Player{
   }
 
   void moveCharacter(){
+
+    
   
     if (analogRead(X_pin) > 900 && row < 5){
   
@@ -72,22 +92,21 @@ class Player{
         wipeCharacter();
         col--;
         makeCharacter();
-        delay(30*i);
+        aDelay(30*i);
       }
-      delay(300);
+      aDelay(300);
   
       for (int i=0; i<4; i++){
         wipeCharacter();
         col++;
         makeCharacter();
-        delay(60/(i+1));
+        aDelay(60/(i+1));
       }
       
     }
   
     makeCharacter();
-    delay(100);
-      
+    aDelay(100);
   }
   
 };
@@ -140,8 +159,6 @@ void setup() {
   
 }
 
-
-
 void loop() {
   // put your main code here, to run repeatedly:
 
@@ -158,7 +175,7 @@ void loop() {
   Serial.print("Y-axis: ");
   Serial.println(analogRead(Y_pin[1]));
   Serial.print("\n\n");
-  delay(500);
+  aDelay(500);
 */
 
   /*
@@ -167,13 +184,13 @@ void loop() {
       lc1.setLed(0, i, j, 1);
       lc2.setLed(0, i, j, 1);
       lc3.setLed(0, i, j, 1);
-      delay(100);
+      aDelay(100);
     }
     for (int i = 0; i < 8; i++){
       lc1.setLed(0, i, j, 0);
       lc2.setLed(0, i, j, 0);
       lc3.setLed(0, i, j, 0);
-      delay(100);
+      aDelay(100);
     }
   }
   */
