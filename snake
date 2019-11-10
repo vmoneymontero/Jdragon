@@ -1,0 +1,296 @@
+#include <LedControl.h>
+
+LedControl lc = LedControl(26, 11, 27, 1);
+
+int SW_pin = 6; // digital pin connected to switch output
+int X_pin = 0; // analog pin connected to X output
+int Y_pin = 1;// analog pin connected to Y output
+
+int row = 4;
+int col = 4;
+
+int vrow = 0;
+int vcol = -1;
+
+int tick = 0;
+
+int X_pin_old = 500;
+int Y_pin_old = 500;
+bool X_pin_moved = false;
+bool Y_pin_moved = false;
+
+unsigned long time_before = 0;
+
+void makeCharacter(){
+
+    lc.setLed(0, row, col, 1);
+    
+}
+
+void wipeCharacter(){
+
+    lc.setLed(0, row, col,0);
+}
+
+void moveCharacter(){
+
+    makeCharacter();
+
+    if (millis() > time_before + 500){
+
+      wipeCharacter();
+
+      time_before = millis();
+      
+      row = row + vrow;
+      col = col + vcol;
+
+      // edge case game over
+      if (row > 7 || row < 0 || col > 7 || col < 0){
+
+        while (true){
+
+          for (int i = 0; i < 8; i++){
+    for (int j = 0; j < 8; j++){
+
+      lc.setLed(0, i, j, 1);
+      delay(5);
+      lc.setLed(0, i, j, 1);
+      delay(5);
+      lc.setLed(0, i, j, 1);
+      delay(5);
+      
+    }
+  }
+
+  for (int i = 0; i < 8; i++){
+    for (int j = 0; j < 8; j++){
+
+      lc.setLed(0, i, j, 0);
+      delay(5);
+      lc.setLed(0, i, j, 0);
+      delay(5);
+      lc.setLed(0, i, j, 0);
+      delay(5);
+      
+    }
+  }
+
+  for (int i = 0; i < 8; i++){
+    for (int j = 0; j < 8; j++){
+
+      lc.setLed(0, j, i, 1);
+      delay(5);
+      lc.setLed(0, j, i, 1);
+      delay(5);
+      lc.setLed(0, j, i, 1);
+      delay(5);
+      
+    }
+  }
+
+  for (int i = 0; i < 8; i++){
+    for (int j = 0; j < 8; j++){
+
+      lc.setLed(0, j, i, 0);
+      delay(5);
+      lc.setLed(0, j, i, 0);
+      delay(5);
+      lc.setLed(0, j, i, 0);
+      delay(5);
+      
+    }
+  } 
+
+  for (int i = -8; i < 8; i++){
+
+      for (int j = 0; j < 8; j++){
+      lc.setLed(0, i+j, j, 1);
+      delay(5);
+      lc.setLed(0, i+j, j, 1);
+      delay(5);
+      lc.setLed(0, i+j, j, 1);
+      delay(5);
+      }
+      delay(5);
+      
+    }
+
+   for (int i = -8; i < 8; i++){
+
+      for (int j = 0; j < 8; j++){
+      lc.setLed(0, i+j, j, 0);
+      delay(5);
+      lc.setLed(0, i+j, j, 0);
+      delay(5);
+      lc.setLed(0, i+j, j, 0);
+      delay(5);
+      }
+      delay(5);
+      
+    }
+
+    for (int i = 8; i > -8; i--){
+
+      for (int j = 0; j < 8; j++){
+      lc.setLed(0, i+j, j, 1);
+      delay(5);
+      lc.setLed(0, i+j, j, 1);
+      delay(5);
+      lc.setLed(0, i+j, j, 1);
+      delay(5);
+      }
+      delay(5);
+      
+    }
+
+   for (int i = 8; i > -8; i--){
+
+      for (int j = 0; j < 8; j++){
+      lc.setLed(0, i+j, j, 0);
+      delay(5);
+      lc.setLed(0, i+j, j, 0);
+      delay(5);
+      lc.setLed(0, i+j, j, 0);
+      delay(5);
+      }
+      delay(5);
+      
+    }
+          
+        }
+        
+      }
+
+    }
+
+    if(abs(analogRead(X_pin) - X_pin_old) > 200){
+      X_pin_moved = true;
+      X_pin_old = analogRead(X_pin);
+    }
+    
+    else{
+      
+      X_pin_moved = false;
+    }
+
+    if(abs(analogRead(Y_pin) - Y_pin_old) > 200){
+      Y_pin_moved = true;
+      Y_pin_old = analogRead(Y_pin);
+    }
+    
+    else{
+      
+      Y_pin_moved = false;
+    }
+ 
+  
+    if (analogRead(X_pin) > 800 && row < 7 && X_pin_moved){
+     
+      vrow = 1;
+      vcol= 0;
+      
+    }
+    if (analogRead(X_pin) < 200 && row > 0 && X_pin_moved){
+  
+      vrow = -1;
+      vcol = 0;
+      
+    }
+    
+    if (analogRead(Y_pin) > 800 && col > 0 && Y_pin_moved){
+      
+      vcol = -1;
+      vrow = 0;
+      
+    }
+    if (analogRead(Y_pin) < 200 && col < 7 && Y_pin_moved){
+  
+      vcol = 1;
+      vrow = 0;
+      
+    }
+    
+}
+
+int collision(int x, int y, int snakex, int snakey) {
+  if (x == snakex && y == snakey) {
+    return 0;
+  }
+  else {
+    return 1;
+  }
+}
+
+void animate(int row, int col){
+
+  for (int k = 0; k < 5; k++){
+
+  lc.setLed(0, row-1, col-1, 1);
+  lc.setLed(0, row-1, col+1, 1);
+  lc.setLed(0, row+1, col-1, 1);
+  lc.setLed(0, row+1, col+1, 1);
+
+  delay(100);
+
+  lc.setLed(0, row-2, col-2, 1);
+  lc.setLed(0, row-2, col+2, 1);
+  lc.setLed(0, row+2, col-2, 1);
+  lc.setLed(0, row+2, col+2, 1);
+
+  delay(100);
+
+  lc.setLed(0, row-1, col-1, 0);
+  lc.setLed(0, row-1, col+1, 0);
+  lc.setLed(0, row+1, col-1, 0);
+  lc.setLed(0, row+1, col+1, 0);
+
+  delay(100);
+
+  lc.setLed(0, row-2, col-2, 0);
+  lc.setLed(0, row-2, col+2, 0);
+  lc.setLed(0, row+2, col-2, 0);
+  lc.setLed(0, row+2, col+2, 0);
+
+  }
+  
+}
+
+void setup() {
+  // put your setup code here, to run once:
+
+  lc.shutdown(0, false);
+  lc.setIntensity(0,8);
+  lc.clearDisplay(0);
+
+  Serial.begin(9600);
+
+  makeCharacter();
+
+}
+
+int check = 0;
+int x = 0;
+int y = 0;
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  moveCharacter();
+
+  while (check == 0) {
+      x = rand() % 8;
+      y = rand() % 8;
+      
+      check = collision(x,y,row,col);
+      lc.setLed(0,x,y,1);
+  }
+  check = collision(x, y, row, col);
+
+  if (check == 0){
+
+    animate(row, col);
+    
+  }
+
+}
