@@ -1,9 +1,9 @@
 #include <LedControl.h>
 
 // DIN, CLK, CS
-LedControl lc1=LedControl(26, 11, 27, 1);
-LedControl lc2=LedControl(22, 13, 23, 1);
-LedControl lc3=LedControl(24, 12, 25, 1);
+LedControl lc1 = LedControl(26, 11, 27, 1);
+LedControl lc2 = LedControl(22, 13, 23, 1);
+LedControl lc3 = LedControl(24, 12, 25, 1);
 
 int SW_pin[2] = {6, 7}; // digital pin connected to switch output
 int X_pin[2] = {0, 2}; // analog pin connected to X output
@@ -12,17 +12,6 @@ int Y_pin[2] = {1, 3};// analog pin connected to Y output
 // initial positions of players
 int row[2] = {0, 5};
 int col[2] = {4, 4};
-
-
-void aDelay(int period){
-
-  int time_before = millis();
-
-  while (millis() <= time_before + period){
-    
-  }
-  
-}
 
 
 class Player{
@@ -65,49 +54,42 @@ class Player{
   }
 
   void moveCharacter(){
-
-    int time_now = -100;
-
-    if(millis() > time_now + 100){
-      
-      Serial.println(time_now);
   
-      if (analogRead(X_pin) > 900 && row < 5){
+    if (analogRead(X_pin) > 900 && row < 5){
 
-        time_now = millis();
-        wipeCharacter();
-        row++;
-        makeCharacter();
-        //aDelay(100);
-       
-        
-      }
-      if (analogRead(X_pin) < 100 && row > 0){
-    
-        wipeCharacter();
-        row--;
-        makeCharacter();
-        //aDelay(100);
-        time_now = millis();
-        
-      }
-    
+      wipeCharacter();
+      row++;
+      makeCharacter();
+      delay(100);
+     
+      
     }
+    if (analogRead(X_pin) < 100 && row > 0){
+  
+      wipeCharacter();
+      row--;
+      makeCharacter();
+      delay(100);
+     
+      
+    }
+    
+    
     if (analogRead(Y_pin) > 900){
   
       for (int i=0; i<4; i++){
         wipeCharacter();
         col--;
         makeCharacter();
-        aDelay(30*i);
+        delay(30*i);
       }
-      aDelay(300);
+      delay(300);
   
       for (int i=0; i<4; i++){
         wipeCharacter();
         col++;
         makeCharacter();
-        aDelay(60/(i+1));
+        delay(60/(i+1));
       }
       
     }
@@ -160,6 +142,9 @@ void setup() {
   player2.X_pin = 0;
   player2.Y_pin = 1;
   player2.SW_pin = 6;
+
+  player1.makeCharacter();
+  player2.makeCharacter();
   
 }
 
@@ -179,7 +164,7 @@ void loop() {
   Serial.print("Y-axis: ");
   Serial.println(analogRead(Y_pin[1]));
   Serial.print("\n\n");
-  aDelay(500);
+  delay(500);
 */
 
   /*
@@ -188,13 +173,13 @@ void loop() {
       lc1.setLed(0, i, j, 1);
       lc2.setLed(0, i, j, 1);
       lc3.setLed(0, i, j, 1);
-      aDelay(100);
+      delay(100);
     }
     for (int i = 0; i < 8; i++){
       lc1.setLed(0, i, j, 0);
       lc2.setLed(0, i, j, 0);
       lc3.setLed(0, i, j, 0);
-      aDelay(100);
+      delay(100);
     }
   }
   */
