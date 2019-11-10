@@ -14,9 +14,9 @@ class Hazards {
     void moveRight();
     void MatrixRight();
     void MatrixLeft();
-    int _x;
-    int _y;
-    int _matrix_num;
+    int x;
+    int y;
+    int matrix_num;
 };
 
 #endif

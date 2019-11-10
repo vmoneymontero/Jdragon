@@ -6,30 +6,27 @@
 #include <Hazards.h>
 
 Hazards::Hazards(int x, int y, int matrix_num) {
-  _x = x;
-  _y = y;
-  _matrix_num = matrix_num;
 }
 
 int Hazards::position() {
-  int _posx = _x;
-  int _posy = _y;
+  int posx = x;
+  int posy = y;
   int matrix = _matrix_num;
   return _posx, _posy, matrix;
 }
 
 void Hazards::moveLeft() {
-  _x++;
+  x++;
 }
 
 void Hazards::moveRight() {
-  _x--;
+  x--;
 }
 
 void Hazards::MatrixRight(){
-  _matrix_num++;
+  matrix_num++;
 }
 
 void Hazards::MatrixLeft() {
-  _matrix_num--;
+  matrix_num--;
 }
