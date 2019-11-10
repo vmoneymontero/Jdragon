@@ -13,20 +13,14 @@ int Y_pin[2] = {1, 3};// analog pin connected to Y output
 int row[2] = {0, 5};
 int col[2] = {4, 4};
 
-void aDelay(int period){
 
+void aDelay(int period){
 
   int time_before = millis();
 
-  while (true){
-  
-    if (millis() > time_before + period){
-  
-      break;
-      
-    }
+  while (millis() <= time_before + period){
+    
   }
-  
   
 }
 
@@ -72,19 +66,32 @@ class Player{
 
   void moveCharacter(){
 
+    int time_now = -100;
+
+    if(millis() > time_now + 100){
+      
+      Serial.println(time_now);
+  
+      if (analogRead(X_pin) > 900 && row < 5){
+
+        time_now = millis();
+        wipeCharacter();
+        row++;
+        makeCharacter();
+        //aDelay(100);
+       
+        
+      }
+      if (analogRead(X_pin) < 100 && row > 0){
     
-  
-    if (analogRead(X_pin) > 900 && row < 5){
-  
-      wipeCharacter();
-      row++;
-      
-    }
-    if (analogRead(X_pin) < 100 && row > 0){
-  
-      wipeCharacter();
-      row--;
-      
+        wipeCharacter();
+        row--;
+        makeCharacter();
+        //aDelay(100);
+        time_now = millis();
+        
+      }
+    
     }
     if (analogRead(Y_pin) > 900){
   
@@ -104,9 +111,6 @@ class Player{
       }
       
     }
-  
-    makeCharacter();
-    aDelay(100);
   }
   
 };
