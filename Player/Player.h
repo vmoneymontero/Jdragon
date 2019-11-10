@@ -22,7 +22,7 @@ class Player {
     int SW_pin;
     int X_pin;
     int Y_pin;
-    LedControl lc = LedControl(26,11,27,1);
+    LedControl lc = LedControl(22, 13, 23, 1);
 };
 
 #endif

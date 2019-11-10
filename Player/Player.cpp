@@ -9,7 +9,7 @@
 
 
 Player::Player(int row, int col, int SW_pin, int X_pin, int Y_pi, LedControl lc) {
-
+  LedControl _lc = lc;
 }
 
 void Player::makeCharacter() {
